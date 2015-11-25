@@ -1,16 +1,16 @@
 class PhotoShoutsController < ApplicationController
   def create
-    content = build_content
-    shout = current_user.shouts.build(content: content)
-    if shout.save
-      redirect_to dashboard_path
-    else
+    unless new_shout.save
       flash.alert = "Could not shout."
-      redirect_to dashboard_path
     end
+    redirect_to dashboard_path
   end
 
   private
+
+  def new_shout
+    current_user.shouts.build(content: build_content)
+  end
 
   def build_content
     PhotoShout.new(photo_shout_parameters)
